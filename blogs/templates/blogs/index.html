@@ -1,0 +1,38 @@
+{% extends 'blogs/base.html' %}
+
+{% block page_header %}
+
+  <div class="jumbotron">
+      <h1 class="display-3">
+          Welcome to my Blog.
+      </h1>
+
+      <p class="lead">Here, you can access all sorts of news and relief. Grab a drink and read with me. Today, Tomorrow or even yesterday :), you are covered.
+      </p>
+
+      <a class="btn btn-lg btn-primary" href="{% url 'users:register' %}" role="button">Register &raquo;</a>
+  </div>
+
+{% endblock page_header %}
+
+{% block content %}
+
+  <p><a href="{% url 'blogs:new_blog' %}">Add a new post</a></p>
+
+
+  {% for blog in blogs %}
+    <div class="card mb-3">
+      <h4 class="card-header">
+        {{ blog }} - 
+        <small><a href="{% url 'blogs:edit_blog' blog.id %}">edit post</a></small>
+      </h4>
+      <div class="card-body">
+        {{ blog.text|linebreaks }}
+      </div>
+    </div>
+  {% empty %}
+    <p>There are no posts for this blog yet.</p>
+  {% endfor %}
+    
+
+{% endblock content %}
