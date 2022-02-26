@@ -40,7 +40,6 @@ def edit_blog(request,blog_id):
     """Edit an existing blog post."""
     blog = BlogPost.objects.get(id=blog_id)
     post = blog.text
-    post = get_object_or_404(blog, id=blog_id)
     #Making sure the blog posts belongs to the current user.
     if blog.owner != request.user:
         raise Http404
