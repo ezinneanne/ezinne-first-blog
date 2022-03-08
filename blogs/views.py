@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect, get_object_or_404
+from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 
@@ -6,10 +6,19 @@ from .models import BlogPost
 from .forms import BlogForm
 
 # Create your views here.
-@login_required
 def index(request):
     """The home page for the Blog."""
-    blogs = BlogPost.objects.filter(owner=request.user).order_by('date_added')
+    #Gets public blogs
+    public_blogs = BlogPost.objects.filter(public=True)
+
+    #Gets private posts
+    if request.user.is_authenticated:
+        private_blogs = BlogPost.objects.filter(owner=request.user)
+        blogs = public_blogs.union(private_blogs).order_by('date_added')
+
+    else:
+        blogs = public_blogs
+
     context = {'blogs':blogs}
     return render(request, 'blogs/index.html',context)
 
